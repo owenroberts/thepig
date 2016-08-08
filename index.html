@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+	<title>the pig</title>
+	<meta charset="utf-8" />
+	<!-- <link href="lines/css/lines.css" rel="stylesheet" type="text/css" /> -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<style>
+		body { font-family: Verdana;}
+		#wrap { max-width: 1024px; margin:0 auto; }
+		a {cursor:pointer; text-decoration: underline;}
+	</style>
+</head>
+<body>
+	<div id="wrap">
+		<h1>The pig</h1>
+		<canvas id="canvas" class="draw" ></canvas>
+		<audio id="audio" src="audio/1.mp3" controls></audio>
+		<p>
+			<a id="start">Start</a>
+			<a id="prev"><< Prev</a>
+			<a id="next">Next >></a>
+		</p>
+	</div>
+
+	<script type="text/javascript" src="lines/lib/jquery.min.js"></script>
+	<script type="text/javascript" src="lines/lib/cool.js"></script>
+	<script type="text/javascript" src="lines/lib/play.js"></script>
+
+	<script>
+
+
+		var	audio =  	document.querySelector('#audio'),
+			startBtn = 	document.querySelector('#start'),
+			prevBtn = 	document.querySelector('#prev'),
+			nextBtn = 	document.querySelector('#next')
+			;
+
+		var currentFrame = 1, numFrames = 24;
+
+		var h = location.hash.split("#")[1];
+		if (h) currentFrame = h;
+
+		var update = function(frame) {
+
+			if (frame == "start") currentFrame = 1;
+			if (frame == "next") {
+				if (currentFrame < numFrames) currentFrame++;
+			}
+			if (frame == "prev") {
+				if (currentFrame > 1) currentFrame--;
+			}
+			if (currentFrame == 1) {
+				startBtn.style.display 	= 'none';
+				prevBtn.style.display 	= 'none';
+			} else {
+				startBtn.style.display 	= 'inline';
+				prevBtn.style.display 	= 'inline';
+			}
+			if (currentFrame == numFrames) nextBtn.style.display = 'none';
+			else  nextBtn.style.display = 'inline';
+			
+			loadAnimation(currentFrame);
+			audio.src = "clips/" + currentFrame + ".mp3";
+			audio.play();
+
+			location.hash = '#'+currentFrame;
+		}
+		
+		startBtn.onclick 	= function() { update("start"); };
+		prevBtn.onclick 	= function() { update("prev"); };
+		nextBtn.onclick 	= function() { update("next"); };
+
+		update();
+
+	</script>
+
+
+</body>
+</html>
